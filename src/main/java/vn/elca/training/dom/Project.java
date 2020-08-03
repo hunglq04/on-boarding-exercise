@@ -7,12 +7,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,6 +26,12 @@ public class Project {
 
 	@OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
 	private Set<Task> tasks = new HashSet<>();
+
+	@OneToMany(mappedBy = "project")
+    private Set<EmployeeProject> employees;
+
+	@ManyToOne
+    private Group group;
 
     public Project() {
     }
@@ -77,4 +78,12 @@ public class Project {
     public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
 	}
+
+    public Set<EmployeeProject> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set<EmployeeProject> employees) {
+        this.employees = employees;
+    }
 }

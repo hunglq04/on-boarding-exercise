@@ -34,7 +34,7 @@ public class IProjectRepositoryTest {
         projectRepository.save(new Project("LAGAPEO", new Date()));
         projectRepository.save(new Project("ZHQUEST", new Date()));
         projectRepository.save(new Project("SECUTIX", new Date()));
-        Assert.assertEquals(4, projectRepository.count());
+        Assert.assertEquals(18, projectRepository.count());
     }
 
     @Test
