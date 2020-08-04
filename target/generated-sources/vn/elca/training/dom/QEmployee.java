@@ -7,7 +7,6 @@ import com.mysema.query.types.path.*;
 import com.mysema.query.types.PathMetadata;
 import javax.annotation.Generated;
 import com.mysema.query.types.Path;
-import com.mysema.query.types.path.PathInits;
 
 
 /**
@@ -20,15 +19,7 @@ public class QEmployee extends EntityPathBase<Employee> {
 
     public static final QEmployee employee = new QEmployee("employee");
 
-    public final ListPath<EmployeeProject, QEmployeeProject> employeeProjects = this.<EmployeeProject, QEmployeeProject>createList("employeeProjects", EmployeeProject.class, QEmployeeProject.class, PathInits.DIRECT2);
-
-    public final ListPath<EmployeeRole, QEmployeeRole> employeeRoles = this.<EmployeeRole, QEmployeeRole>createList("employeeRoles", EmployeeRole.class, QEmployeeRole.class, PathInits.DIRECT2);
-
-    public final ListPath<Group, QGroup> groups = this.<Group, QGroup>createList("groups", Group.class, QGroup.class, PathInits.DIRECT2);
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
-
-    public final StringPath name = createString("name");
 
     public final StringPath visa = createString("visa");
 

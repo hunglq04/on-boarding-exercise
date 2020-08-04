@@ -24,6 +24,8 @@ public class QEmployeeProject extends EntityPathBase<EmployeeProject> {
 
     public final QEmployee employee;
 
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
     public final QProject project;
 
     public QEmployeeProject(String variable) {

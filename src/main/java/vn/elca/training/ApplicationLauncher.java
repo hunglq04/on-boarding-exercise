@@ -14,8 +14,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+import vn.elca.training.service.GroupService;
+import vn.elca.training.service.IGroupService;
 import vn.elca.training.service.IProjectService;
-import vn.elca.training.service.ProjectService;
 import vn.elca.training.web.ApplicationController;
 
 @Configuration
@@ -25,7 +26,7 @@ import vn.elca.training.web.ApplicationController;
 public class ApplicationLauncher implements CommandLineRunner {
 
     @Autowired
-    private ProjectService projectService;
+    private IGroupService groupService;
 
     public static void main(String[] args) {
         SpringApplication.run(ApplicationLauncher.class, args);
@@ -55,6 +56,6 @@ public class ApplicationLauncher implements CommandLineRunner {
 
     @Override
     public void run(String... strings) {
-         projectService.insertDummyData();
+         groupService.insertDummyData();
     }
 }

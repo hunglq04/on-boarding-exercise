@@ -22,13 +22,11 @@ public class QGroup extends EntityPathBase<Group> {
 
     public static final QGroup group = new QGroup("group1");
 
-    public final QEmployee employee;
-
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath name = createString("name");
+    public final QEmployee leader;
 
-    public final ListPath<Project, QProject> projects = this.<Project, QProject>createList("projects", Project.class, QProject.class, PathInits.DIRECT2);
+    public final StringPath name = createString("name");
 
     public QGroup(String variable) {
         this(Group.class, forVariable(variable), INITS);
@@ -48,7 +46,7 @@ public class QGroup extends EntityPathBase<Group> {
 
     public QGroup(Class<? extends Group> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.employee = inits.isInitialized("employee") ? new QEmployee(forProperty("employee")) : null;
+        this.leader = inits.isInitialized("leader") ? new QEmployee(forProperty("leader")) : null;
     }
 
 }

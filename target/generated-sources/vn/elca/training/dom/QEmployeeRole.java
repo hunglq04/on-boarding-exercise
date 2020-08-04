@@ -24,6 +24,8 @@ public class QEmployeeRole extends EntityPathBase<EmployeeRole> {
 
     public final QEmployee employee;
 
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
     public final QRole role;
 
     public QEmployeeRole(String variable) {

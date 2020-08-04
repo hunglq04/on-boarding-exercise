@@ -1,16 +1,15 @@
 package vn.elca.training.dom;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "\"GROUP\"")
 public class Group implements Serializable {
@@ -19,7 +18,13 @@ public class Group implements Serializable {
     @Column
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Employee employee;
-    @OneToMany(mappedBy = "group")
-    private List<Project> projects;
+    @JoinColumn
+    private Employee leader;
+//    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+//    @JsonIgnore
+//    private List<Project> projects;
+
+    public Group() {
+        this.leader = new Employee();
+    }
 }

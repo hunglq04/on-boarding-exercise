@@ -22,15 +22,17 @@ public class QProject extends EntityPathBase<Project> {
 
     public static final QProject project = new QProject("project");
 
-    public final SetPath<EmployeeProject, QEmployeeProject> employees = this.<EmployeeProject, QEmployeeProject>createSet("employees", EmployeeProject.class, QEmployeeProject.class, PathInits.DIRECT2);
-
     public final DateTimePath<java.util.Date> finishingDate = createDateTime("finishingDate", java.util.Date.class);
 
     public final QGroup group;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final QEmployee leader;
+
     public final StringPath name = createString("name");
+
+    public final EnumPath<vn.elca.training.constant.Status> status = createEnum("status", vn.elca.training.constant.Status.class);
 
     public final SetPath<Task, QTask> tasks = this.<Task, QTask>createSet("tasks", Task.class, QTask.class, PathInits.DIRECT2);
 
@@ -53,6 +55,7 @@ public class QProject extends EntityPathBase<Project> {
     public QProject(Class<? extends Project> type, PathMetadata<?> metadata, PathInits inits) {
         super(type, metadata, inits);
         this.group = inits.isInitialized("group") ? new QGroup(forProperty("group"), inits.get("group")) : null;
+        this.leader = inits.isInitialized("leader") ? new QEmployee(forProperty("leader")) : null;
     }
 
 }

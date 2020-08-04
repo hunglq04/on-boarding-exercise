@@ -1,18 +1,23 @@
 package vn.elca.training.dom;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
+import vn.elca.training.constant.Status;
 import vn.elca.training.constant.StringConst;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-public class Project {
+@Data
+public class Project implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
@@ -23,67 +28,44 @@ public class Project {
     @NotNull(message = "Finishing date is required")
     @DateTimeFormat(pattern = StringConst.DATE_PATTERN)
     private Date finishingDate;
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Employee leader;
 
 	@OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
 	private Set<Task> tasks = new HashSet<>();
 
-	@OneToMany(mappedBy = "project")
-    private Set<EmployeeProject> employees;
+//	@OneToMany(mappedBy = "project")
+//    private Set<EmployeeProject> employees;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Group group;
 
     public Project() {
     }
 
+    public Project(String name, Date finishingDate, Status status, Employee leader, Group group) {
+        this.name = name;
+        this.finishingDate = finishingDate;
+        this.status = status;
+        this.leader = leader;
+        this.group = group;
+    }
+
     public Project(String name, Date finishingDate) {
         this.name = name;
         this.finishingDate = finishingDate;
+        this.status = Status.NEW;
     }
 
-    public Project(Long id, String name, Date finishingDate) {
+    public Project(Long id, String name, Date finishingDate, Status status) {
         this.id = id;
         this.name = name;
         this.finishingDate = finishingDate;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Date getFinishingDate() {
-        return finishingDate;
-    }
-
-	public Set<Task> getTasks() {
-		return tasks;
-	}
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setFinishingDate(Date finishingDate) {
-        this.finishingDate = finishingDate;
-    }
-
-    public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-    public Set<EmployeeProject> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<EmployeeProject> employees) {
-        this.employees = employees;
+        this.status = status;
     }
 }

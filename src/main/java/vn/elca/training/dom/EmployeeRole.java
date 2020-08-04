@@ -2,11 +2,9 @@ package vn.elca.training.dom;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.hibernate.mapping.Join;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -14,13 +12,22 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class EmployeeRole implements Serializable {
 
-    @Id@ManyToOne(fetch = FetchType.LAZY)
+    @Id@GeneratedValue
+    private Long id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Employee employee;
-    @Id@ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
     private Role role;
 
     public EmployeeRole() {
         this.employee = new Employee();
         this.role = new Role();
+    }
+
+    public EmployeeRole(Employee employee, Role role) {
+        this.employee = employee;
+        this.role = role;
     }
 }
