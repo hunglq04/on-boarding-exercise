@@ -1,6 +1,7 @@
 package vn.elca.training.service;
 
 import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.ConstructorExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import vn.elca.training.constant.Status;
@@ -35,6 +36,9 @@ public class GroupService implements IGroupService {
 
     @Autowired
     private IEmployeeRoleRepository employeeRoleRepository;
+
+    @Autowired
+    private IProjectService projectService;
 
     @Override
     public void insertDummyData() {
@@ -129,10 +133,12 @@ public class GroupService implements IGroupService {
     }
 
     @Override
-    public GroupDto getGroupById() {
-        List<Group> groups = new JPAQuery(entityManager)
+    public List<GroupDto> getAllGroup() {
+        List<GroupDto> groups = new JPAQuery(entityManager)
                 .from(QGroup.group)
-                .list(QGroup.group);
-        return null;
+                .innerJoin(QGroup.group.leader, QEmployee.employee)
+                .list(ConstructorExpression.create(GroupDto.class, QGroup.group.name, QEmployee.employee.visa));
+        groups.forEach(g -> g.setProjects(projectService.getProjectByGroupId(g.getGroupName())));
+        return groups;
     }
 }

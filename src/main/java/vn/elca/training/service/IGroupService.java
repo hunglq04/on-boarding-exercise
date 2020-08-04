@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface IGroupService {
     void insertDummyData();
-    GroupDto getGroupById();
+    List<GroupDto> getAllGroup();
 }

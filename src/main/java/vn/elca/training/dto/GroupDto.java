@@ -13,4 +13,9 @@ public class GroupDto {
     private String groupName;
     private String leader;
     private List<ProjectDto> projects;
+
+    public GroupDto(String name, String leader) {
+        this.groupName = name;
+        this.leader = leader;
+    }
 }

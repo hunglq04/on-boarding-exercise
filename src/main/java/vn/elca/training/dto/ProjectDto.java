@@ -13,4 +13,9 @@ public class ProjectDto {
     private String projectName;
     private String leader;
     private List<EmployeeDto> member;
+
+    public ProjectDto(String projectName, String leader) {
+        this.projectName = projectName;
+        this.leader = leader;
+    }
 }

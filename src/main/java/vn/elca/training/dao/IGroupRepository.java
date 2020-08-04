@@ -5,6 +5,8 @@ import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 import vn.elca.training.dom.Group;
 
+import java.util.List;
+
 @Repository
 public interface IGroupRepository extends JpaRepository<Group, Long>, QueryDslPredicateExecutor<Group> {
 }

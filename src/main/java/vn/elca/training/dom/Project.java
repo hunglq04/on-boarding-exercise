@@ -38,8 +38,8 @@ public class Project implements Serializable {
 	@OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
 	private Set<Task> tasks = new HashSet<>();
 
-//	@OneToMany(mappedBy = "project")
-//    private Set<EmployeeProject> employees;
+	@OneToMany(mappedBy = "project")
+    private Set<EmployeeProject> employees;
 
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn

@@ -1,18 +1,25 @@
 package vn.elca.training.service;
 
+import com.mysema.query.jpa.JPASubQuery;
+import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.types.ConstructorExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import vn.elca.training.constant.Status;
 import vn.elca.training.dao.IProjectRepository;
-import vn.elca.training.dom.Project;
+import vn.elca.training.dom.*;
+import vn.elca.training.dto.EmployeeDto;
+import vn.elca.training.dto.ProjectDto;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectService implements IProjectService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     private IProjectRepository projectRepository;
@@ -41,22 +48,41 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public void insertDummyData() {
-//        List<Project> dummyData = Arrays.asList(
-//                new Project("EFV", new Date(119, Calendar.JANUARY, 15), Status.FINISHED),
-//                new Project("CXTRANET", new Date(120, Calendar.FEBRUARY, 15), Status.FINISHED),
-//                new Project("Determine the launch window", new Date(120, Calendar.MARCH, 15), Status.FINISHED),
-//                new Project("Lift off", new Date(120, Calendar.APRIL, 5), Status.FINISHED),
-//                new Project("Achieve low Earth orbit", new Date(120, Calendar.APRIL, 10), Status.FINISHED),
-//                new Project("Transition to a trans-lunar trajectory", new Date(120, Calendar.APRIL, 15), Status.IN_PROGRESS),
-//                new Project("CRYSTAL BALL", new Date(121, Calendar.APRIL, 20), Status.IN_PROGRESS),
-//                new Project("IOC CLIENT EXTRANET", new Date(122, Calendar.MAY, 5), Status.IN_PROGRESS),
-//                new Project("Descend to the moon’s surface", new Date(120, Calendar.MAY, 10), Status.IN_PROGRESS),
-//                new Project("Explore", new Date(120, Calendar.MAY, 15), Status.IN_PROGRESS),
-//                new Project("Pack up and go home", new Date(120, Calendar.JUNE, 15), Status.NEW),
-//                new Project("Dock with the orbiting vessel", new Date(120, Calendar.JULY, 5), Status.NEW),
-//                new Project("Head back to Earth", new Date(120, Calendar.JULY, 10), Status.NEW),
-//                new Project("KSTA MIGRATION", new Date(123, Calendar.JULY, 15), Status.NEW));
-//        projectRepository.save(dummyData);
+    public List<EmployeeDto> getMembersOfProject(String name) {
+        QEmployee employee = new QEmployee("employee");
+        QEmployeeProject employeeProject = new QEmployeeProject("employeeProject");
+        QEmployeeRole employeeRole = new QEmployeeRole("employeeRole");
+        QRole role = new QRole("role");
+        QProject project = new QProject("project");
+        return new JPAQuery(entityManager)
+                .from(employeeRole)
+                .innerJoin(employeeRole.employee, employee)
+                .innerJoin(employeeRole.role, role)
+                .where(employee.in(
+                    new JPASubQuery()
+                        .from(employeeProject)
+                        .innerJoin(employeeProject.employee, employee)
+                        .innerJoin(employeeProject.project, project)
+                        .where(project.name.eq(name).and(role.name.notIn("Group Leader", "Project Leader")))
+                        .list(employee)
+                ))
+                .list(ConstructorExpression.create(EmployeeDto.class, employee.visa, role.name));
     }
+
+    @Override
+    public List<ProjectDto> getProjectByGroupId(String name) {
+        List<ProjectDto> projects = new JPAQuery(entityManager)
+                .from(QProject.project)
+                .innerJoin(QProject.project.leader, QEmployee.employee)
+                .innerJoin(QProject.project.group, QGroup.group)
+                .where(QGroup.group.name.eq(name))
+                .list(ConstructorExpression.create(ProjectDto.class, QProject.project.name, QEmployee.employee.visa));
+        projects.forEach(p -> {
+            String prjName = p.getProjectName();
+            p.setMember(getMembersOfProject(prjName));
+        });
+        return projects;
+    }
+
+
 }

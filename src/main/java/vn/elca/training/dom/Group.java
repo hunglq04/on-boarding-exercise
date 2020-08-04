@@ -21,7 +21,6 @@ public class Group implements Serializable {
     @JoinColumn
     private Employee leader;
 //    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-//    @JsonIgnore
 //    private List<Project> projects;
 
     public Group() {

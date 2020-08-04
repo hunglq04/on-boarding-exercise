@@ -2,12 +2,14 @@ package vn.elca.training.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import vn.elca.training.dao.IProjectRepository;
 import vn.elca.training.dom.Group;
+import vn.elca.training.dto.EmployeeDto;
+import vn.elca.training.dto.GroupDto;
+import vn.elca.training.dto.ProjectDto;
 import vn.elca.training.service.IGroupService;
+import vn.elca.training.service.IProjectService;
 
 import java.util.List;
 
@@ -18,10 +20,25 @@ public class GroupController {
     @Autowired
     private IGroupService groupService;
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @Autowired
+    private IProjectService projectService;
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
-    List<Group> getGroupById(@PathVariable("id") String id) {
-//        return groupService.getGroupById();
-        return null;
+    public List<GroupDto> getGroupById() {
+        return groupService.getAllGroup();
+    }
+
+
+    @RequestMapping(value = "/{name}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<ProjectDto> getGroupById(@PathVariable("name") String name) {
+        return projectService.getProjectByGroupId(name);
+    }
+
+    @RequestMapping(value = "/project")
+    @ResponseBody
+    public List<EmployeeDto> getMemberOfProject(@RequestParam("name") String name) {
+        return projectService.getMembersOfProject(name);
     }
 }

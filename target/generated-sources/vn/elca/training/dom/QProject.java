@@ -22,6 +22,8 @@ public class QProject extends EntityPathBase<Project> {
 
     public static final QProject project = new QProject("project");
 
+    public final SetPath<EmployeeProject, QEmployeeProject> employees = this.<EmployeeProject, QEmployeeProject>createSet("employees", EmployeeProject.class, QEmployeeProject.class, PathInits.DIRECT2);
+
     public final DateTimePath<java.util.Date> finishingDate = createDateTime("finishingDate", java.util.Date.class);
 
     public final QGroup group;
