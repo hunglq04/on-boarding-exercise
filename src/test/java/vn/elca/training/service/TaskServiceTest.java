@@ -1,22 +1,14 @@
 package vn.elca.training.service;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import com.mysema.query.jpa.impl.JPAQuery;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-
-import com.mysema.query.jpa.impl.JPAQuery;
-
+import org.springframework.transaction.annotation.Transactional;
 import vn.elca.training.ApplicationLauncher;
 import vn.elca.training.dao.IProjectRepository;
 import vn.elca.training.dao.ITaskRepository;
@@ -27,6 +19,11 @@ import vn.elca.training.dom.Task;
 import vn.elca.training.dom.TaskAudit.AuditType;
 import vn.elca.training.exception.DeadlineGreaterThanProjectFinishingDateException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author vlp
  *
@@ -35,7 +32,7 @@ import vn.elca.training.exception.DeadlineGreaterThanProjectFinishingDateExcepti
 @SpringApplicationConfiguration(classes = ApplicationLauncher.class)
 @TransactionConfiguration
 // please remove this annotation to do the Hibernate exercise
-@Ignore
+//@Ignore
 public class TaskServiceTest {
 	@PersistenceContext
 	private EntityManager em;
@@ -60,6 +57,7 @@ public class TaskServiceTest {
 	}
 
 	@Test
+	@Transactional
     public void testListNumberOfTasks() {
 		createProjectAndTaskData(1, 3);
         List<Project> projectsByTaskName = taskService.findProjectsByTaskName("Task 1");

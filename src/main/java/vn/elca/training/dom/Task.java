@@ -1,20 +1,16 @@
 package vn.elca.training.dom;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import vn.elca.training.dom.validator.TaskDeadlineValid;
+import vn.elca.training.exception.DeadlineGreaterThanProjectFinishingDateException;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import vn.elca.training.exception.DeadlineGreaterThanProjectFinishingDateException;
-
 @Entity
-// @TaskDeadlineValid
+@TaskDeadlineValid
 public class Task implements Serializable {
     @Id
     @GeneratedValue

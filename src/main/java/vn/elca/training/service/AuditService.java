@@ -15,18 +15,20 @@
 
 package vn.elca.training.service;
 
-import javax.transaction.Transactional;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import vn.elca.training.dao.ITaskAuditRepository;
 import vn.elca.training.dom.Task;
 import vn.elca.training.dom.TaskAudit;
 import vn.elca.training.dom.TaskAudit.AuditType;
 import vn.elca.training.dom.TaskAudit.Status;
+import vn.elca.training.exception.DeadlineGreaterThanProjectFinishingDateException;
 
 /**
  * @author vlp
@@ -41,6 +43,7 @@ public class AuditService implements IAuditService {
     private ITaskAuditRepository taskAuditRepository;
 
     @Override
+    @Transactional(noRollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
     public void saveAuditDataForTask(Task task, AuditType auditType, Status status, String message) {
         try {
             TaskAudit taskAudit = new TaskAudit(task, auditType, status, message);

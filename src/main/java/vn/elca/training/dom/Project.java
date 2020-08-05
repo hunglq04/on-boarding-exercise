@@ -1,8 +1,10 @@
 package vn.elca.training.dom;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
+import lombok.*;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.format.annotation.DateTimeFormat;
 import vn.elca.training.constant.Status;
 import vn.elca.training.constant.StringConst;
@@ -16,7 +18,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@BatchSize(size = 10)
 public class Project implements Serializable {
     @Id
     @GeneratedValue
@@ -38,8 +44,8 @@ public class Project implements Serializable {
 	@OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
 	private Set<Task> tasks = new HashSet<>();
 
-	@OneToMany(mappedBy = "project")
-    private Set<EmployeeProject> employees;
+//	@OneToMany(mappedBy = "project")
+//    private Set<EmployeeProject> employees;
 
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
@@ -67,5 +73,15 @@ public class Project implements Serializable {
         this.name = name;
         this.finishingDate = finishingDate;
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", finishingDate=" + finishingDate +
+                ", status=" + status +
+                '}';
     }
 }

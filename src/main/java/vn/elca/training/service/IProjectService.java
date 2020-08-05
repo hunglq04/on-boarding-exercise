@@ -13,4 +13,5 @@ public interface IProjectService {
     void save(Project project);
     List<EmployeeDto> getMembersOfProject(String name);
     List<ProjectDto> getProjectByGroupId(String name);
+    void maintainProjects() throws Exception;
 }

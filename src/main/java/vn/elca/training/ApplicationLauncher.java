@@ -14,6 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+import org.springframework.core.SpringVersion;
 import vn.elca.training.service.GroupService;
 import vn.elca.training.service.IGroupService;
 import vn.elca.training.service.IProjectService;
@@ -57,5 +58,6 @@ public class ApplicationLauncher implements CommandLineRunner {
     @Override
     public void run(String... strings) {
          groupService.insertDummyData();
+        System.out.println("version: " + SpringVersion.getVersion());
     }
 }

@@ -16,24 +16,12 @@
 
 package vn.elca.training.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
+import com.mysema.query.jpa.impl.JPAQuery;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.mysema.query.jpa.impl.JPAQuery;
-
 import vn.elca.training.dao.ITaskRepository;
 import vn.elca.training.dom.Project;
 import vn.elca.training.dom.QProject;
@@ -43,12 +31,16 @@ import vn.elca.training.dom.TaskAudit.AuditType;
 import vn.elca.training.dom.TaskAudit.Status;
 import vn.elca.training.exception.DeadlineGreaterThanProjectFinishingDateException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.*;
+
 /**
  * @author vlp
  *
  */
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class TaskService implements ITaskService {
     private Log logger = LogFactory.getLog(getClass());
 
