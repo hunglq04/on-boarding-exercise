@@ -98,6 +98,7 @@ public class TaskService implements ITaskService {
         task.setDeadline(deadline);
 		AuditType auditType = AuditType.INSERT;
 		try {
+//			task.validateDeadline();
 		    task = taskRepository.saveAndFlush(task);
 		    auditService.saveAuditDataForTask(task, auditType, Status.SUCCESS, "Task was saved successfully.");
 		} catch (Exception e) {

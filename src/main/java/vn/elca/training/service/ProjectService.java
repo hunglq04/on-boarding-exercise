@@ -76,11 +76,13 @@ public class ProjectService implements IProjectService {
 
     @Override
     public List<ProjectDto> getProjectByGroupId(String name) {
+        QEmployee queryEmployee = new QEmployee("abc");
         List<ProjectDto> projects = new JPAQuery(entityManager)
                 .from(QProject.project)
-                .innerJoin(QProject.project.leader, QEmployee.employee)
+                .innerJoin(QProject.project.leader, queryEmployee)
                 .innerJoin(QProject.project.group, QGroup.group)
                 .where(QGroup.group.name.eq(name))
+                .where(queryEmployee.visa.like("abc"))
                 .list(ConstructorExpression.create(ProjectDto.class, QProject.project.name, QEmployee.employee.visa));
         projects.forEach(p -> {
             String prjName = p.getProjectName();
